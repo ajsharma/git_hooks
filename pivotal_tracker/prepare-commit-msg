@@ -12,7 +12,8 @@
 #
 # Example:
 #
-# 1234567_branch_name => '[#1234567] commit message'
+# branch-name-1234567 => '[#1234567] commit message'
+# branch_name_1234567 => '[#1234567] commit message'
 #
 # @author Tamas Kalman <ktamas77@gmail.com>
 
@@ -23,12 +24,12 @@ $messagePivotalPattern = '/^\[#([0-9]{1,16})\]/';
 preg_match($messagePivotalPattern, $message, $matches);
 $messagePivotalId = (isset($matches[1])) ? $matches[1] : null;
 if ($messagePivotalId === null) {
-    $currentBranchName = exec('git rev-parse --abbrev-ref HEAD');
-    $branchPivotalPattern = '/^([0-9]{1,16})_/';
-    preg_match($branchPivotalPattern, $currentBranchName, $matches);
-    $branchPivotalId = (isset($matches[1])) ? $matches[1] : null;
-    if ($branchPivotalId !== null) {
-        $message = sprintf('[#%s] %s', $branchPivotalId, $message);
-        file_put_contents($messageFile, $message);
-    }
+  $currentBranchName = exec('git rev-parse --abbrev-ref HEAD');
+  $branchPivotalPattern = '/([0-9]{1,16})$/';
+  preg_match($branchPivotalPattern, $currentBranchName, $matches);
+  $branchPivotalId = (isset($matches[1])) ? $matches[1] : null;
+  if ($branchPivotalId !== null) {
+    $message = sprintf('[#%s] %s', $branchPivotalId, $message);
+    file_put_contents($messageFile, $message);
+  }
 }
